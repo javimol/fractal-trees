@@ -39,7 +39,7 @@ def bmp_to_png_data_uri(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-o", "--output", default=os.path.join(ROOT, "dist", "fractal-trees.html"))
-    ap.add_argument("--data", default=os.path.join(ROOT, "data"))
+    ap.add_argument("--data", default=os.path.join(ROOT, "data", "chopos"))
     ap.add_argument("--fragment", action="store_true")
     args = ap.parse_args()
 
@@ -47,6 +47,9 @@ def main():
                    key=lambda p: [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", p)])
     payload = {"trees": [{"name": os.path.basename(f), "text": open(f).read()} for f in files]}
     bark = os.path.join(args.data, "bark.bmp")
+    if not os.path.exists(bark):  # fall back to the first *.bmp, like the C viewer
+        bmps = sorted(glob.glob(os.path.join(args.data, "*.bmp")))
+        bark = bmps[0] if bmps else bark
     if os.path.exists(bark):
         payload["bark"] = bmp_to_png_data_uri(bark)
 

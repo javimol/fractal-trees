@@ -12,6 +12,7 @@
 #include "tree.h"
 #include "viewer.h"
 
+#include <ctype.h>
 #include <getopt.h>
 #include <glob.h>
 #include <stdio.h>
@@ -19,7 +20,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#define DEFAULT_DATA_DIR "data"
+#define DEFAULT_DATA_DIR "data/chopos"
 #define MAX_PATH 1024
 
 static void usage(const char *prog, FILE *out)
@@ -28,7 +29,9 @@ static void usage(const char *prog, FILE *out)
         "Usage: %s [options] [FILE.fra | DIRECTORY]...\n"
         "\n"
         "Displays one or more fractal trees. A DIRECTORY loads every *.fra file in it\n"
-        "(and its bark.bmp texture, if present). Default: '" DEFAULT_DATA_DIR "'.\n"
+        "(sorted naturally: Arbol2 before Arbol10) and uses bark.bmp, or else the first\n"
+        "*.bmp in it, as the bark texture. Default: '" DEFAULT_DATA_DIR "' next to the\n"
+        "program or in the current directory.\n"
         "\n"
         "Options:\n"
         "  -m, --mode N         render mode: 0 lines, 1 cylinders, 2 cylinders + joints,\n"
@@ -80,7 +83,30 @@ static int add_tree(const char *path, Tree **trees, int *count)
     return 0;
 }
 
-/* Loads every *.fra in a directory (sorted by name). */
+/* Natural order: "Arbol2" sorts before "Arbol10". */
+static int natural_cmp(const void *pa, const void *pb)
+{
+    const char *a = *(const char *const *)pa, *b = *(const char *const *)pb;
+    while (*a && *b) {
+        if (isdigit((unsigned char)*a) && isdigit((unsigned char)*b)) {
+            char *ea, *eb;
+            unsigned long na = strtoul(a, &ea, 10), nb = strtoul(b, &eb, 10);
+            if (na != nb)
+                return na < nb ? -1 : 1;
+            a = ea;
+            b = eb;
+        } else {
+            if (*a != *b)
+                return (unsigned char)*a - (unsigned char)*b;
+            a++;
+            b++;
+        }
+    }
+    return (unsigned char)*a - (unsigned char)*b;
+}
+
+/* Loads every *.fra in a directory (natural order). If no texture was chosen
+ * yet, uses the directory's bark.bmp, or else its first *.bmp. */
 static void add_directory(const char *dir, Tree **trees, int *count, char *texture, size_t texture_size)
 {
     char pattern[MAX_PATH];
@@ -91,16 +117,38 @@ static void add_directory(const char *dir, Tree **trees, int *count, char *textu
         fprintf(stderr, "%s: no .fra files found\n", dir);
         return;
     }
+    qsort(g.gl_pathv, g.gl_pathc, sizeof *g.gl_pathv, natural_cmp);
     for (size_t i = 0; i < g.gl_pathc; i++)
         add_tree(g.gl_pathv[i], trees, count);
     globfree(&g);
 
-    if (texture[0] == '\0') {
-        char bark[MAX_PATH];
-        snprintf(bark, sizeof bark, "%s/bark.bmp", dir);
-        if (file_exists(bark))
-            snprintf(texture, texture_size, "%s", bark);
+    if (texture[0] != '\0')
+        return;
+    char bark[MAX_PATH];
+    snprintf(bark, sizeof bark, "%s/bark.bmp", dir);
+    if (file_exists(bark)) {
+        snprintf(texture, texture_size, "%s", bark);
+        return;
     }
+    snprintf(pattern, sizeof pattern, "%s/*.bmp", dir);
+    if (glob(pattern, 0, NULL, &g) == 0) {
+        qsort(g.gl_pathv, g.gl_pathc, sizeof *g.gl_pathv, natural_cmp);
+        snprintf(texture, texture_size, "%s", g.gl_pathv[0]);
+        globfree(&g);
+    }
+}
+
+/* Finds the default data directory: next to the executable, else relative
+ * to the current directory. */
+static const char *default_data_dir(const char *argv0, char *buf, size_t size)
+{
+    const char *slash = strrchr(argv0, '/');
+    if (slash) {
+        snprintf(buf, size, "%.*s/%s", (int)(slash - argv0), argv0, DEFAULT_DATA_DIR);
+        if (is_directory(buf))
+            return buf;
+    }
+    return DEFAULT_DATA_DIR;
 }
 
 int main(int argc, char **argv)
@@ -158,7 +206,8 @@ int main(int argc, char **argv)
     }
 
     if (optind == argc) {
-        add_directory(DEFAULT_DATA_DIR, &cfg.trees, &cfg.tree_count, texture, sizeof texture);
+        char dir[MAX_PATH];
+        add_directory(default_data_dir(argv[0], dir, sizeof dir), &cfg.trees, &cfg.tree_count, texture, sizeof texture);
     } else {
         for (int i = optind; i < argc; i++) {
             if (is_directory(argv[i]))

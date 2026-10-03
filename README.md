@@ -4,7 +4,7 @@ A 3D viewer for fractal tree models, written in C with OpenGL and GLUT. It start
 
 ![Forest of seven poplar models](docs/forest.png)
 
-Each tree is a plain-text list of branches, and each branch is drawn as a tapered cylinder. The seven sample trees in `data/` are poplar (*Populus*) models with between 158 and 544 branches each. They're textured with poplar bark.
+Each tree is a plain-text list of branches, and each branch is drawn as a tapered cylinder. The default set, `data/chopos/` (*chopo* is Spanish for poplar), has seven poplar (*Populus*) models with between 158 and 544 branches each. They're textured with poplar bark.
 
 ## Desktop viewer (C / OpenGL)
 
@@ -24,9 +24,10 @@ make
 ### Run
 
 ```sh
-./fractal-trees                 # every tree in data/, laid out as a small forest
+./fractal-trees                 # every tree in data/chopos/, laid out as a small forest
 ./fractal-trees -n 0            # just tree 0
-./fractal-trees my_tree.fra     # your own file(s) or directories
+./fractal-trees ~/some/folder   # every *.fra in a folder, e.g. an original 2006 tree set
+./fractal-trees my_tree.fra     # or individual files
 ./fractal-trees --help
 ```
 
@@ -43,6 +44,8 @@ make
 | `s` | Save `screenshot.ppm` |
 | `q` or `Esc` | Quit |
 
+When given a folder, the viewer loads its `.fra` files in natural order (`Arbol2` before `Arbol10`) and uses `bark.bmp` as the bark texture, or the first `.bmp` it finds if there's no `bark.bmp`. So a 2006 tree folder works as-is.
+
 `-o file.ppm` renders a single frame to a file and exits. That's how the images in `docs/` were made.
 
 ![Line and textured modes](docs/modes.png)
@@ -52,7 +55,7 @@ make
 `web/index.html` is a three.js version of the same viewer.
 
 - **Without a server:** run `python3 tools/build_standalone.py`. It writes `dist/fractal-trees.html` with the trees and texture embedded, and you can open that file directly in a browser.
-- **From the repository:** run `python3 -m http.server` in the repository root and open <http://localhost:8000/web/>. That page loads `data/*.fra`.
+- **From the repository:** run `python3 -m http.server` in the repository root and open <http://localhost:8000/web/>. That page loads `data/chopos/`.
 
 You can also drop your own `.fra` files onto the page.
 
@@ -60,7 +63,7 @@ You can also drop your own `.fra` files onto the page.
 
 ## The `.fra` format
 
-There's one branch per line, with whitespace-separated numbers. Lines that start with `#` or `//` are ignored.
+There's one branch per line, with whitespace-separated numbers. Lines that start with `#` or `//` are ignored, and Windows (CRLF) line endings are fine.
 
 ```
 # D1      D2        h          Fi         alfa       r0x       r0y         r0z
@@ -81,11 +84,11 @@ So a branch runs from `r0` to `r0 + h · (sin Fi · sin alfa, cos Fi, sin Fi · 
 ## Repository layout
 
 ```
-src/        C sources: main.c (CLI), viewer.c (OpenGL/GLUT), tree.c (.fra loader), bmp.c
-data/       sample trees (tree0–6.fra) and bark texture (bark.bmp)
-web/        browser viewer (three.js)
-tools/      build_standalone.py: single-file web build
-docs/       screenshots
+src/          C sources: main.c (CLI), viewer.c (OpenGL/GLUT), tree.c (.fra loader), bmp.c
+data/chopos/  the default poplar set (Arbol0–6.fra, original 2006 files) and bark.bmp
+web/          browser viewer (three.js)
+tools/        build_standalone.py: single-file web build
+docs/         screenshots
 ```
 
 The first commit contains the original 2006 Windows sources, unchanged except for conversion to UTF-8 and Unix line endings.
