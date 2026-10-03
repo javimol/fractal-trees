@@ -1,4 +1,4 @@
-# Árboles fractales
+# Fractal trees
 
 A 3D viewer for fractal tree models, written in C with OpenGL and GLUT. It started as a 2005–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid) and was originally built with Visual C++ on Windows. This repository is a cleaned-up port that builds and runs on Linux and macOS. It also includes a browser viewer, so you can look at the trees without compiling anything.
 
