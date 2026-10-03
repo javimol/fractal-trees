@@ -60,8 +60,8 @@
 
 
 int main(int argc, char* argv[]) {
-	char  nombre_fichero[25];
-	char  nombre_fichero_textura[25];
+	char  nombre_fichero[256];
+	char  nombre_fichero_textura[256];
 	int i = 0;
 	FILE*	fichero = NULL;
 	FILE*	fichero_textura = NULL;
@@ -99,8 +99,8 @@ int main(int argc, char* argv[]) {
 		return ERR;
 	}
 i = 0;	
-sprintf(nombre_fichero, 			".\\%s\\arbol%d.fra",argv[1], i);
-sprintf(nombre_fichero_textura, 	".\\%s\\arbol%d.bmp",argv[1], i);
+sprintf(nombre_fichero, 			"%s/Arbol%d.fra",argv[1], i);
+sprintf(nombre_fichero_textura, 	"%s/Arbol%d.bmp",argv[1], i);
 
 fichero 			= abrirFichero(nombre_fichero,Lectura);
 fichero_textura 	= abrirFichero(nombre_fichero_textura,Lectura);
@@ -112,13 +112,14 @@ while (fichero)
 	fichero = NULL;
 	fichero_textura = NULL;
 	i++;
-	sprintf(nombre_fichero, ".\\%s\\arbol%d.fra",argv[1], i);
-	sprintf(nombre_fichero_textura, 	".\\%s\\arbol%d.bmp",argv[1], i);
+	sprintf(nombre_fichero, "%s/Arbol%d.fra",argv[1], i);
+	sprintf(nombre_fichero_textura, 	"%s/Arbol%d.bmp",argv[1], i);
 	fichero 			= abrirFichero(nombre_fichero,Lectura);
 	fichero_textura 	= abrirFichero(nombre_fichero_textura,Lectura);
 }
 
 
+	glutInit(&argc, argv);
 	// Mostramos la ventana inicial del OpenGL
 	inicializarVentanaOpenGL(argv[1],esqueleto,&array_arboles);
 	// Inicializamos con la visualización
@@ -128,7 +129,7 @@ while (fichero)
 		Liberamos la memoria de la estructura que corresponda
 		Esqueleto o Arbol
 	*/
-	if (TRUE)
+	if (1)
 	{
 		i = 0;
 		while(array_arboles[i].ramas!=NULL)
