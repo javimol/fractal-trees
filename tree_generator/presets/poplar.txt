@@ -1,0 +1,23 @@
+# Poplar forest ("Bosque de chopos") from the 2006 slides; it made data/chopos.
+# Percentages are 0-100, angles in degrees. Lines are "key = value"; # starts a comment.
+
+max_height             = 900      # height cap
+growth_rate            = 25       # height gained per year
+age                    = 100      # age in months; height = min(age / 12 * growth_rate, max_height)
+trunk_ratio            = 30       # % of the height taken by the first trunk segment
+segment_ratio          = 80       # % length of each segment relative to the one before
+base_ratio             = 5        # % base diameter relative to the height
+taper                  = 5        # % diameter lost along each segment
+branch_ratio           = 60       # % branch length relative to its parent segment
+branch_diameter_ratio  = 35       # % branch base diameter relative to the parent tip
+cone                   = 50       # polar angle of first-generation branches
+cone_increment         = 15       # cone widening: level n adds cone_increment * (1/2 + ... + 1/(n+1))
+min_azimuth            = 0        # azimuth range where branches grow
+max_azimuth            = 360
+generations            = 3        # branching levels, also the maximum segments per axis
+frondage               = 25       # 100/frondage sections around a segment, each branching with (100 - frondage)% chance
+stop_probability       = 25       # % chance that an axis stops instead of growing a new segment
+deviousness            = 50       # % chance a segment is bent; bent ones split into 1 + 100/(100 - deviousness) pieces
+bend_angle             = 60       # maximum polar angle of each bent piece
+bend_arc               = 45       # azimuth turn between pieces, in [-bend_arc/2, bend_arc/2]
+variability            = 35       # % chance and maximum size of random changes to lengths, angles and diameters

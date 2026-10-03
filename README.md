@@ -1,15 +1,16 @@
 # Fractal trees
 
-3D models of trees described as lists of branches, and a visualizer to explore them. It started as a 2004–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid), originally built with Visual C++ on Windows. This repository is a cleaned-up, portable version of it.
+3D models of trees described as lists of branches, a generator that grows new ones from a handful of parameters, and a visualizer to explore them. It started as a 2004–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid), originally built with Visual C++ on Windows. This repository is a cleaned-up, portable version of it.
 
 ![Forest of seven poplar models](docs/forest.png)
 
 ## Contents
 
 ```
-data/chopos/  seven poplar (chopo) models, Arbol0–6.fra, plus a bark texture
-visualizer/   desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
-docs/         screenshots
+data/chopos/     seven poplar (chopo) models, Arbol0–6.fra, plus a bark texture
+tree_generator/  command-line generator that grows new .fra trees (C, no dependencies)
+visualizer/      desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
+docs/            screenshots
 ```
 
 To see the trees straight away:
@@ -21,6 +22,21 @@ make            # see visualizer/README.md for dependencies
 ```
 
 Or open the web viewer without compiling anything; [visualizer/README.md](visualizer/README.md#web-viewer) explains how.
+
+To grow a forest of your own and look at it:
+
+```sh
+cd tree_generator
+make
+./tree-generator -n 7 -o forest
+../visualizer/fractal-trees -t ../data/chopos/bark.bmp forest
+```
+
+## The generator
+
+[tree_generator/](tree_generator/) grows a tree step by step: each segment can continue its axis with a shorter, thinner one and sprout branches around it inside a cone, and any segment can come out crooked. About twenty parameters (height, growth rate, age, branching cone, frondage, crookedness, variability…) control the shape, and they're read from a simple `key = value` file. The defaults are the ones that made `data/chopos/`, so its trees look like the originals, as in the picture below. [tree_generator/README.md](tree_generator/README.md) describes every parameter and the algorithm.
+
+![Seven trees grown with the poplar parameters](docs/generated-forest.png)
 
 ## The tree models
 
@@ -42,15 +58,17 @@ Each `.fra` file describes one tree as plain text, one branch per line. Each bra
 
 So a branch runs from `r0` to `r0 + h · (sin Fi · sin alfa, cos Fi, sin Fi · cos alfa)`. Values are whitespace-separated, lines starting with `#` or `//` are comments, and Windows (CRLF) line endings are fine.
 
-The files in `data/chopos/` are the original 2006 files, unchanged. They range from 158 to 544 branches per tree.
+The files in `data/chopos/` are the original 2006 files, unchanged. They were made by the 2006 version of the generator and range from 158 to 544 branches per tree.
 
 ## History
 
 The first commit holds the original 2006 Windows sources of the visualizer, unchanged except for conversion to UTF-8 and Unix line endings. Later commits port it to Linux and then clean it up; [visualizer/README.md](visualizer/README.md#changes-from-the-2006-version) lists what changed.
 
+The generator was a separate Windows program (MFC, Visual C++) by Víctor Fernández-Carbajales Cañete. `tree_generator/` is a rewrite of it as a portable command-line tool that keeps the same algorithm; [tree_generator/README.md](tree_generator/README.md#changes-from-the-2006-version) lists what changed.
+
 ## Credits
 
-Original program by **Víctor Fernández-Carbajales Cañete** and **Javier Molina Vela**, 2004–2006. Port and cleanup by Javier Molina Vela, 2026.
+Original visualizer by **Víctor Fernández-Carbajales Cañete** and **Javier Molina Vela**, 2004–2006; original generator by **Víctor Fernández-Carbajales Cañete**, 2006. Port and cleanup by Javier Molina Vela, 2026.
 
 ## License
 

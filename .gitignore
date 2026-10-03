@@ -2,3 +2,5 @@ visualizer/fractal-trees
 visualizer/src/*.o
 visualizer/dist/
 *.ppm
+tree_generator/tree-generator
+tree_generator/src/*.o
