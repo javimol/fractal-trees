@@ -1,4 +1,4 @@
-fractal-trees
-src/*.o
-dist/
+visualizer/fractal-trees
+visualizer/src/*.o
+visualizer/dist/
 *.ppm

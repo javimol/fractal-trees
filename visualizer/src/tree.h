@@ -13,7 +13,7 @@
  *
  * Lines that are empty or start with '#' or '//' are ignored.
  *
- * Copyright (c) 2005-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
+ * Copyright (c) 2004-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
  * Copyright (c) 2026 Javier Molina Vela
  * SPDX-License-Identifier: MIT
  */

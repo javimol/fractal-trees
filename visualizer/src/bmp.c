@@ -1,7 +1,7 @@
 /*
  * bmp.c - Minimal loader for uncompressed 24-bit BMP images.
  *
- * Copyright (c) 2005-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
+ * Copyright (c) 2004-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
  * Copyright (c) 2026 Javier Molina Vela
  * SPDX-License-Identifier: MIT
  */
@@ -41,12 +41,14 @@ int bmp_load(const char *path, Image *img)
     }
 
     uint32_t data_offset = le32(header + 10);
+    uint32_t dib_size    = le32(header + 14);
     int32_t  width       = (int32_t)le32(header + 18);
     int32_t  height      = (int32_t)le32(header + 22);
     uint16_t bpp         = le16(header + 28);
     uint32_t compression = le32(header + 30);
 
-    if (bpp != 24 || compression != 0 || width <= 0 || height == 0) {
+    if (dib_size < 40 || bpp != 24 || compression != 0 || width <= 0 || height == 0 ||
+        width > 16384 || height > 16384 || height < -16384) {
         fprintf(stderr, "%s: only uncompressed 24-bit BMPs are supported\n", path);
         fclose(f);
         return -1;

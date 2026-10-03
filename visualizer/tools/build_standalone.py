@@ -3,12 +3,15 @@
 
     python3 tools/build_standalone.py [--fragment] [-o dist/fractal-trees.html]
 
+Run from the visualizer/ folder (paths are resolved relative to this script).
+
 The result opens directly from disk (no web server needed). --fragment drops the
 <html>/<head>/<body> wrapper, for hosts that add their own page skeleton.
 """
 import argparse, base64, glob, io, json, os, re, struct, zlib
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # visualizer/
+REPO = os.path.dirname(ROOT)
 
 
 def bmp_to_png_data_uri(path):
@@ -39,7 +42,7 @@ def bmp_to_png_data_uri(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-o", "--output", default=os.path.join(ROOT, "dist", "fractal-trees.html"))
-    ap.add_argument("--data", default=os.path.join(ROOT, "data", "chopos"))
+    ap.add_argument("--data", default=os.path.join(REPO, "data", "chopos"))
     ap.add_argument("--fragment", action="store_true")
     args = ap.parse_args()
 

@@ -131,7 +131,7 @@ input[type=range] { flex: 1; accent-color: var(--moss); min-width: 0; }
   <aside class="panel">
     <header>
       <h1>Fractal trees</h1>
-      <p class="sub">Poplar models, UAM 2005–2006</p>
+      <p class="sub">Poplar models, UAM 2004–2006</p>
     </header>
 
     <div class="group">
@@ -402,7 +402,7 @@ async function loadFiles(files) {
   if (!loaded.length) { setStatus("Those files have no branch rows. Each row needs 8 numbers: D1 D2 h Fi alfa r0x r0y r0z."); return; }
   setTrees(loaded);
 }
-document.getElementById("file").addEventListener("change", e => loadFiles([...e.target.files]));
+document.getElementById("file").addEventListener("change", e => { loadFiles([...e.target.files]); e.target.value = ""; });
 const dropEl = document.getElementById("drop");
 stage.addEventListener("dragover", e => { e.preventDefault(); dropEl.hidden = false; });
 stage.addEventListener("dragleave", e => { if (e.target === dropEl) dropEl.hidden = true; });
@@ -418,7 +418,7 @@ function setTrees(trees) {
   layoutForest(trees); renderTreeList(); rebuild(true); setStatus("");
 }
 
-/* ---------- startup: embedded data (single-file build) or ../data/ ---------- */
+/* ---------- startup: embedded data (single-file build) or the repo's data/chopos/ ---------- */
 async function loadDefaultData() {
   const embedded = document.getElementById("fra-data");
   if (embedded) {
@@ -428,12 +428,12 @@ async function loadDefaultData() {
   }
   const trees = [];
   for (let i = 0; i < 100; i++) {
-    const res = await fetch(`../data/chopos/Arbol${i}.fra`).catch(() => null);
+    const res = await fetch(`../../data/chopos/Arbol${i}.fra`).catch(() => null);
     if (!res || !res.ok) break;
     const t = makeTree(`Arbol${i}.fra`, await res.text());
     if (t) trees.push(t);
   }
-  barkTexture = await loadTexture("../data/chopos/bark.bmp").catch(() => null);
+  barkTexture = await loadTexture("../../data/chopos/bark.bmp").catch(() => null);
   return trees;
 }
 function loadTexture(url) {
@@ -463,7 +463,7 @@ ground.material.color = cssColor("--ground");
 loadDefaultData().then(trees => {
   if (!barkTexture && state.mode === 3) { state.mode = 2; syncMode(); }
   if (trees.length) setTrees(trees);
-  else setStatus("No trees found in ../data/chopos/. Serve the repository root (python3 -m http.server) and open /web/, or open .fra files with the panel.");
+  else setStatus("No trees found in data/chopos/. Serve the repository root (python3 -m http.server) and open /visualizer/web/, or open .fra files with the panel.");
 }).catch(err => setStatus("Could not load the trees: " + err.message));
 </script>
 </body>

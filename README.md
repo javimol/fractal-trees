@@ -1,69 +1,30 @@
 # Fractal trees
 
-A 3D viewer for fractal tree models, written in C with OpenGL and GLUT. It started as a 2005–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid) and was originally built with Visual C++ on Windows. This repository is a cleaned-up port that builds and runs on Linux and macOS. It also includes a browser viewer, so you can look at the trees without compiling anything.
+3D models of trees described as lists of branches, and a visualizer to explore them. It started as a 2004–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid), originally built with Visual C++ on Windows. This repository is a cleaned-up, portable version of it.
 
 ![Forest of seven poplar models](docs/forest.png)
 
-Each tree is a plain-text list of branches, and each branch is drawn as a tapered cylinder. The default set, `data/chopos/` (*chopo* is Spanish for poplar), has seven poplar (*Populus*) models with between 158 and 544 branches each. They're textured with poplar bark.
+## Contents
 
-## Desktop viewer (C / OpenGL)
-
-### Build
-
-```sh
-# Debian / Ubuntu
-sudo apt install build-essential freeglut3-dev libglu1-mesa-dev
-# Fedora
-sudo dnf install gcc make freeglut-devel mesa-libGLU-devel
-# Arch
-sudo pacman -S base-devel freeglut glu
-
-make
+```
+data/chopos/  seven poplar (chopo) models, Arbol0–6.fra, plus a bark texture
+visualizer/   desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
+docs/         screenshots
 ```
 
-### Run
+To see the trees straight away:
 
 ```sh
-./fractal-trees                 # every tree in data/chopos/, laid out as a small forest
-./fractal-trees -n 0            # just tree 0
-./fractal-trees ~/some/folder   # every *.fra in a folder, e.g. an original 2006 tree set
-./fractal-trees my_tree.fra     # or individual files
-./fractal-trees --help
+cd visualizer
+make            # see visualizer/README.md for dependencies
+./fractal-trees
 ```
 
-| Input | Action |
-|---|---|
-| Left drag | Orbit |
-| Right drag / mouse wheel | Zoom |
-| Middle drag / arrow keys | Pan |
-| `0` `1` `2` `3` | Lines / cylinders / cylinders + joints / bark texture |
-| `+` `-` | More / less geometric detail |
-| `n` or `Tab` | Cycle through each tree, then back to the whole forest |
-| `a` `g` | Toggle axes / ground |
-| `r` | Reset the view |
-| `s` | Save `screenshot.ppm` |
-| `q` or `Esc` | Quit |
+Or open the web viewer without compiling anything; [visualizer/README.md](visualizer/README.md#web-viewer) explains how.
 
-When given a folder, the viewer loads its `.fra` files in natural order (`Arbol2` before `Arbol10`) and uses `bark.bmp` as the bark texture, or the first `.bmp` it finds if there's no `bark.bmp`. So a 2006 tree folder works as-is.
+## The tree models
 
-`-o file.ppm` renders a single frame to a file and exits. That's how the images in `docs/` were made.
-
-![Line and textured modes](docs/modes.png)
-
-## Web viewer
-
-`web/index.html` is a three.js version of the same viewer.
-
-- **Without a server:** run `python3 tools/build_standalone.py`. It writes `dist/fractal-trees.html` with the trees and texture embedded, and you can open that file directly in a browser.
-- **From the repository:** run `python3 -m http.server` in the repository root and open <http://localhost:8000/web/>. That page loads `data/chopos/`.
-
-You can also drop your own `.fra` files onto the page.
-
-![Web viewer](docs/web-viewer.png)
-
-## The `.fra` format
-
-There's one branch per line, with whitespace-separated numbers. Lines that start with `#` or `//` are ignored, and Windows (CRLF) line endings are fine.
+Each `.fra` file describes one tree as plain text, one branch per line. Each branch is a tapered cylinder:
 
 ```
 # D1      D2        h          Fi         alfa       r0x       r0y         r0z
@@ -79,33 +40,17 @@ There's one branch per line, with whitespace-separated numbers. Lines that start
 | `alfa` | Azimuth around the vertical, in degrees (0 = +Z, 90 = +X) |
 | `r0x r0y r0z` | Centre of the branch base |
 
-So a branch runs from `r0` to `r0 + h · (sin Fi · sin alfa, cos Fi, sin Fi · cos alfa)`.
+So a branch runs from `r0` to `r0 + h · (sin Fi · sin alfa, cos Fi, sin Fi · cos alfa)`. Values are whitespace-separated, lines starting with `#` or `//` are comments, and Windows (CRLF) line endings are fine.
 
-## Repository layout
+The files in `data/chopos/` are the original 2006 files, unchanged. They range from 158 to 544 branches per tree.
 
-```
-src/          C sources: main.c (CLI), viewer.c (OpenGL/GLUT), tree.c (.fra loader), bmp.c
-data/chopos/  the default poplar set (Arbol0–6.fra, original 2006 files) and bark.bmp
-web/          browser viewer (three.js)
-tools/        build_standalone.py: single-file web build
-docs/         screenshots
-```
+## History
 
-The first commit contains the original 2006 Windows sources, unchanged except for conversion to UTF-8 and Unix line endings.
-
-## Changes from the 2006 version
-
-- Replaced the Windows-only headers (`windows.h`, `conio.h`, `glaux`) with portable freeglut, and fixed the case-sensitive file paths.
-- BMP textures are now decoded properly. The original uploaded the raw file, including its 54-byte header, with blue and red swapped.
-- Textures and geometry are built once and cached, not on every frame. The original also leaked a GLU quadric per branch per frame.
-- Removed the hard limits of 1000 branches per tree and 50 trees.
-- Fixed the projection and added an orbit camera that frames the scene automatically.
-- Removed the unused skeleton/point-cloud viewer that the program grew out of.
-- Translated the code and comments from Spanish to English.
+The first commit holds the original 2006 Windows sources of the visualizer, unchanged except for conversion to UTF-8 and Unix line endings. Later commits port it to Linux and then clean it up; [visualizer/README.md](visualizer/README.md#changes-from-the-2006-version) lists what changed.
 
 ## Credits
 
-Original program by **Víctor Fernández-Carbajales Cañete** and **Javier Molina Vela**, 2005–2006. Port and cleanup by Javier Molina Vela, 2026.
+Original program by **Víctor Fernández-Carbajales Cañete** and **Javier Molina Vela**, 2004–2006. Port and cleanup by Javier Molina Vela, 2026.
 
 ## License
 

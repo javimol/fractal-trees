@@ -2,16 +2,22 @@
  * viewer.c - Interactive OpenGL/GLUT viewer for a forest of branch-list trees.
  *
  * Uses the fixed-function OpenGL pipeline and GLU quadrics, as the original
- * 2005 program did, so it runs on practically any OpenGL implementation.
+ * program did, so it runs on practically any OpenGL implementation.
  *
- * Copyright (c) 2005-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
+ * Copyright (c) 2004-2006 Víctor Fernández-Carbajales Cañete and Javier Molina Vela
  * Copyright (c) 2026 Javier Molina Vela
  * SPDX-License-Identifier: MIT
  */
 #include "viewer.h"
 
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
+#include <GLUT/glut.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/glut.h>
 #include <GL/glu.h>
+#endif
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -423,6 +429,8 @@ static void on_key(unsigned char key, int x, int y)
     switch (key) {
     case '0': case '1': case '2': case '3':
         c->mode = (RenderMode)(key - '0');
+        if (c->mode == MODE_TEXTURED && !V.bark_texture)
+            c->mode = MODE_JOINTS;  /* no texture loaded */
         break;
     case '+': case '=':
         if (c->mode == MODE_LINES)
