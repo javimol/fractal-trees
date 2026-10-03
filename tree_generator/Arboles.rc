@@ -1,0 +1,386 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Modern) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MODERN
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESP)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 10, 3\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\Arboles.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.esp\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Arboles.ico"
+IDI_GTI_ICON            ICON    DISCARDABLE     "res\\icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ARBOLES_DIALOG DIALOGEX 0, 0, 319, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Parameter Trees"
+MENU IDR_MAINMENU
+FONT 10, "Arial"
+BEGIN
+    LTEXT           "Max. Height: ",IDC_MAXI_STATIC,15,22,46,8
+    EDITTEXT        IDC_EDIT_MAX_HEIGHT,90,20,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Pace  Growth:",IDC_PACE_STATIC,15,38,48,8
+    EDITTEXT        IDC_EDIT_PACE,90,36,53,12,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "Age:",IDC_AGE_STATIC,15,54,16,8
+    EDITTEXT        IDC_EDIT_AGE,90,52,53,12,ES_RIGHT | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    LTEXT           "Ratio Top/Trunk:",IDC_RATIO_TOP_STATIC,15,70,55,8
+    EDITTEXT        IDC_EDIT_RATIO_TOP,90,68,53,12,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "Ratio Branch/Branch:",IDC_RATIO_BRANCH_STATIC,15,86,72,
+                    8
+    EDITTEXT        IDC_EDIT_RATIO_BRANCH,90,84,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Tree Cone:",IDC_TREE_CONE_STATIC,15,101,41,8
+    EDITTEXT        IDC_EDIT_TREE_CONE,90,99,53,12,ES_RIGHT | ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    LTEXT           "Var. Tree Cone: ",IDC_VAR_TREE_CONE_STATIC,15,117,54,8
+    EDITTEXT        IDC_EDIT_VAR_TREE_CONE,90,115,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Min. Angle:",IDC_MIN_ANGLE_STATIC,15,133,39,8
+    EDITTEXT        IDC_EDIT_MIN_ANGLE,90,131,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Max. Angle:",IDC_MAX_ANGLE_STATIC,15,149,41,8
+    EDITTEXT        IDC_EDIT_MAX_ANGLE,90,147,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Generation:",IDC_GENERATION_STATIC,15,163,39,8
+    EDITTEXT        IDC_EDIT_GENERATION,90,161,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Frondage:",IDC_FRONDAGE_STATIC,153,22,34,8
+    EDITTEXT        IDC_EDIT_FRONDAGE,252,20,53,12,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "Ratio Trunk/Branch:",IDC_RATIO_TRUNK_STATIC,153,38,67,8
+    EDITTEXT        IDC_EDIT_RATIO_TRUNK,252,36,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Ratio Base/Height:",IDC_RATIO_BASE_STATIC,153,54,63,8
+    EDITTEXT        IDC_EDIT_RATIO_BASE,252,52,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Ratio Diameter:",IDC_RATIO_DIAMETER_STATIC,153,70,52,8
+    EDITTEXT        IDC_EDIT_RATIO_DIAMETER,252,68,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Ratio Diameter Trunk/Branch:",
+                    IDC_RATIO_DIAMETER_TRUNK_STATIC,153,86,99,8
+    EDITTEXT        IDC_EDIT_RATIO_TRUNK2,252,84,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Probability Trunk:",IDC_PROBABILITY_TRUNK_STATIC,153,
+                    101,59,8
+    EDITTEXT        IDC_EDIT_PROBABILITY_TRUNK,252,99,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Deviousness Angle:",IDC_DEVIOUSNESS_ANGLE_STATIC,153,
+                    117,70,8
+    EDITTEXT        IDC_EDIT_DEVIOUSNESS_ANGLE,252,115,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Deviousness Arch:",IDC_DEVIOUSNESS_ARCH_STATIC,153,133,
+                    70,8
+    EDITTEXT        IDC_EDIT_DEVIOUSNESS_ARCH,252,131,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Deviousness:",IDC_DEVIOUSNESS_STATIC,153,149,45,8
+    EDITTEXT        IDC_EDIT_DEVIOUSNESS,252,147,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Variability:",IDC_VARIABILITY_STATIC,153,163,36,8
+    EDITTEXT        IDC_EDIT_VARIABILITY,252,161,53,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "Generate",IDGENERATE,95,179,50,14
+    DEFPUSHBUTTON   "Reset",IDRESET,169,179,50,14
+    GROUPBOX        "Parameters",IDC_GLOBAL_STATIC,7,7,305,168
+    GROUPBOX        "",IDC_BASIC_1_STATIC,7,15,141,160
+    GROUPBOX        "",IDC_BASIC_1_STATIC2,146,15,166,160
+END
+
+IDD_ABOUT_DIALOG DIALOG DISCARDABLE  0, 0, 243, 65
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About ..."
+FONT 10, "Arial"
+BEGIN
+    GROUPBOX        "About Parameter Trees",IDC_ABOUT_STATIC,7,7,229,51
+    LTEXT           "Parameter Trees V 2.0",IDC_STATIC,57,23,152,12
+    LTEXT           "Autor: Víctor Fernández-Carbajales Cañete",IDC_STATIC,
+                    57,34,152,12
+    LTEXT           "GTI - UAM",IDC_STATIC,57,45,152,12
+    ICON            IDI_GTI_ICON,IDC_STATIC,21,22,20,20
+END
+
+IDD_CLOSE_DIALOG DIALOG DISCARDABLE  0, 0, 230, 84
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Close Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "Close Application",IDC_ABOUT_STATIC,7,7,216,70
+    LTEXT           "Thank you for using this program",IDC_STATIC_THANKS,76,
+                    16,135,15
+    ICON            IDI_GTI_ICON,IDC_STATIC,25,27,20,20
+    LTEXT           "Parameter Trees V 0.1",IDC_STATIC_VERSION,75,30,142,15
+    LTEXT           "Autor: Víctor Fernández-Carbajales Cañete",
+                    IDC_STATIC_AUTOR,76,44,142,15
+    LTEXT           "GTI - UAM",IDC_STATIC_COMPANY,76,58,144,15
+END
+
+IDD_HELP_DIALOG DIALOG DISCARDABLE  0, 0, 224, 70
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Help Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,86,45,50,14
+    GROUPBOX        "Help",IDC_ABOUT_STATIC,8,10,209,53
+    CTEXT           "For more information consult the user's manual (Manual.doc) that you find in the directory help of the program.",
+                    IDC_STATIC,16,22,191,18
+END
+
+IDD_ERR_FILE_DIALOG DIALOG DISCARDABLE  0, 0, 181, 59
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Error File Not Create Dialgo"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,67,32,50,14
+    LTEXT           "Error 001: File can't be written of the application.",
+                    IDC_STATIC_THANKS,13,19,159,15
+    GROUPBOX        "ERROR",IDC_ERROR_STATIC,7,7,167,45
+END
+
+IDD_GENERATE_DIALOG DIALOG DISCARDABLE  0, 0, 181, 63
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Success Tree Generation"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,67,35,50,14
+    LTEXT           "The tree was created successfully",IDC_STATIC_THANKS,34,
+                    18,120,15
+    GROUPBOX        "Sucess Generation",IDC_ERROR_STATIC,7,7,167,49
+END
+
+IDD_INFORAMTION_DIALOG DIALOG DISCARDABLE  0, 0, 115, 59
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Information Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,29,32,50,14
+    LTEXT           "Save File Concluided",IDC_STATIC_THANKS,23,17,82,15
+    GROUPBOX        "Information",IDC_ERROR_STATIC,7,7,101,45
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "0c0a04b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "GTI - UAM\0"
+            VALUE "FileDescription", "Application with MFC interfaces for fractals trees\0"
+            VALUE "FileVersion", "2, 0, 0, 0\0"
+            VALUE "InternalName", "Arboles\0"
+            VALUE "LegalCopyright", "Copyright (C) 2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "Arboles.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "Parameter Trees\0"
+            VALUE "ProductVersion", "2, 0, 0, 0\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0xc0a, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ARBOLES_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 312
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_ABOUT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 236
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 58
+    END
+
+    IDD_CLOSE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 77
+    END
+
+    IDD_HELP_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 217
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
+    END
+
+    IDD_ERR_FILE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 174
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 52
+    END
+
+    IDD_GENERATE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 174
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 56
+    END
+
+    IDD_INFORAMTION_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 108
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 52
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Archive"
+    BEGIN
+        MENUITEM "Save File",                   ID_ARCHIVEV_SAVEFILE
+        MENUITEM "Save File MPEG4",             ID_ARCHIVEV_SAVEFILE_MPEG4
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_ARCHIVEV_EXIT
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "Help",                        ID_HELP_HELP
+        MENUITEM SEPARATOR
+        MENUITEM "About ...",                   ID_HELP_ABOUT
+    END
+END
+
+#endif    // Spanish (Modern) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESP)
+#ifdef _WIN32
+LANGUAGE 10, 3
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\Arboles.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.esp\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
