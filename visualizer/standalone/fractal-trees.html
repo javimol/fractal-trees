@@ -246,10 +246,24 @@ function applyTheme() {
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+const SPIRAL_SPACING = 1.0;  /* spiral step, in mean tree footprints */
+
 /* Seeded layout so the forest looks the same on every visit. */
 function layoutForest(trees) {
   let seed = 1;
   const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  /* Big forests: jittered sunflower spiral, so trees spread evenly over a disc. */
+  if (trees.length > 8) {
+    const spacing = SPIRAL_SPACING * trees.reduce((s, t) => s + t.footprint, 0) / trees.length;
+    trees.forEach((t, i) => {
+      const a = i * GOLDEN_ANGLE + (rand() - 0.5) * 0.5;
+      const r = spacing * Math.sqrt(i + 0.5) * (0.9 + 0.2 * rand());
+      t.offset = new THREE.Vector3(r * Math.sin(a), 0, r * Math.cos(a));
+    });
+    return;
+  }
+  /* Small forests: tree 0 in the centre, the rest on a jittered ring around it. */
   const ring = 1.4 * Math.max(...trees.map(t => t.footprint));
   trees.forEach((t, i) => {
     if (i === 0) { t.offset = new THREE.Vector3(); return; }

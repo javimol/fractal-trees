@@ -7,10 +7,11 @@
 ## Contents
 
 ```
-data/chopos/     seven poplar (chopo) models, Arbol0–6.fra, plus a bark texture
-tree_generator/  command-line generator that grows new .fra trees (C, no dependencies)
-visualizer/      desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
-docs/            screenshots
+data/chopos/             seven poplar (chopo) models, Arbol0–6.fra, plus a bark texture
+data/big_forest_chopos/  50 poplars grown with the generator, tree0–49.fra, plus the same texture
+tree_generator/          command-line generator that grows new .fra trees (C, no dependencies)
+visualizer/              desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
+docs/                    screenshots
 ```
 
 To see the trees straight away:
@@ -38,6 +39,18 @@ make
 
 ![Seven trees grown with the poplar parameters](docs/generated-forest.png)
 
+### A bigger forest
+
+[data/big_forest_chopos/](data/big_forest_chopos/) holds 50 poplars (21,749 branches) grown with the default parameters:
+
+```sh
+./tree-generator -s 2026 -n 50 -o ../data/big_forest_chopos
+```
+
+To explore it without running anything, clone the repository (or download that single file) and open your local copy of [visualizer/standalone/big-forest.html](visualizer/standalone/big-forest.html) in a browser. With the desktop viewer, run `./fractal-trees ../data/big_forest_chopos`.
+
+![Fifty generated poplars](docs/big-forest.png)
+
 ## The tree models
 
 Each `.fra` file describes one tree as plain text, one branch per line. Each branch is a tapered cylinder:
@@ -58,7 +71,7 @@ Each `.fra` file describes one tree as plain text, one branch per line. Each bra
 
 So a branch runs from `r0` to `r0 + h · (sin Fi · sin alfa, cos Fi, sin Fi · cos alfa)`. Values are whitespace-separated, lines starting with `#` or `//` are comments, and Windows (CRLF) line endings are fine.
 
-The files in `data/chopos/` are the original 2006 files, unchanged. They were made by the 2006 version of the generator and range from 158 to 544 branches per tree.
+The files in `data/chopos/` are the original 2006 files, unchanged. They were made by the 2006 version of the generator and range from 158 to 544 branches per tree. Those in `data/big_forest_chopos/` come from the rewritten generator and range from 71 to 759.
 
 ## History
 

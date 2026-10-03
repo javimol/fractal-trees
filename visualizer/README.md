@@ -36,6 +36,8 @@ It's tested on Linux. macOS should also work, since the Makefile links the syste
 
 Without arguments, the program finds `data/chopos/` from where the executable is, so it also works when started from another directory.
 
+Up to 8 trees are laid out with one in the centre and the rest on a ring around it. Bigger forests are spread over a disc on a jittered sunflower spiral, in both the desktop and web viewers.
+
 When given a folder, the viewer loads its `.fra` files in natural order (`Arbol2` before `Arbol10`). It uses `bark.bmp` as the bark texture, or the first `.bmp` in the folder if there's no `bark.bmp`, so a 2006 tree folder works as-is. Textures must be uncompressed 24-bit BMP files.
 
 | Input | Action |
@@ -68,7 +70,13 @@ src/viewer.c/h OpenGL/GLUT rendering, camera and controls
 
 `web/index.html` is a three.js version of the same viewer, with the same render modes. You can also drop your own `.fra` files onto it.
 
-- **Without a server:** clone the repository (or download just [standalone/fractal-trees.html](standalone/fractal-trees.html)) and open the local file in a browser; GitHub itself only shows its source. It's a single file with the trees and texture embedded. It loads three.js from a CDN, so it needs an internet connection. After changing `web/index.html` or the data, rebuild it with `python3 tools/build_standalone.py`.
+- **Without a server:** clone the repository (or download just [standalone/fractal-trees.html](standalone/fractal-trees.html)) and open the local file in a browser; GitHub itself only shows its source. It's a single file with the trees and texture embedded. It loads three.js from a CDN, so it needs an internet connection. [standalone/big-forest.html](standalone/big-forest.html) is the same viewer with the 50 trees of `data/big_forest_chopos/`. After changing `web/index.html` or the data, rebuild them:
+
+  ```sh
+  python3 tools/build_standalone.py
+  python3 tools/build_standalone.py --data ../data/big_forest_chopos -o standalone/big-forest.html
+  ```
+
 - **From the repository:** run `python3 -m http.server` in the repository root (the folder above this one) and open <http://localhost:8000/visualizer/web/>. That page loads `data/chopos/`.
 
 ![Web viewer](../docs/web-viewer.png)

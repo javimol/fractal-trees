@@ -78,13 +78,32 @@ void viewer_layout_forest(Tree *trees, int count, unsigned seed)
     if (count == 1)
         return;
 
-    /* Tree 0 sits in the centre, the rest on a jittered ring around it. */
+    srand(seed);
+
+    /* Big forests: jittered sunflower spiral, so trees spread evenly over a disc. */
+    if (count > 8) {
+        const float golden_angle = (float)M_PI * (3.0f - sqrtf(5.0f));
+        float spacing = 0.0f;  /* spiral step: the mean footprint */
+        for (int i = 0; i < count; i++)
+            spacing += tree_footprint(&trees[i]);
+        spacing /= (float)count;
+
+        for (int i = 0; i < count; i++) {
+            float a = i * golden_angle + ((float)rand() / RAND_MAX - 0.5f) * 0.5f;
+            float r = spacing * sqrtf(i + 0.5f) * (0.9f + 0.2f * (float)rand() / RAND_MAX);
+            trees[i].offset[0] = r * sinf(a);
+            trees[i].offset[1] = 0.0f;
+            trees[i].offset[2] = r * cosf(a);
+        }
+        return;
+    }
+
+    /* Small forests: tree 0 in the centre, the rest on a jittered ring around it. */
     float ring = 0.0f;
     for (int i = 0; i < count; i++)
         ring = fmaxf(ring, tree_footprint(&trees[i]));
     ring *= 1.4f;
 
-    srand(seed);
     for (int i = 1; i < count; i++) {
         float jitter_a = ((float)rand() / RAND_MAX - 0.5f) * 0.6f;
         float jitter_r = 0.8f + 0.4f * (float)rand() / RAND_MAX;
