@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Árboles Fractales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;1,400&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-height 3D stage with a narrow specimen-label panel (left on desktop, below on phones). */
+:root {
+  --paper: #eef1ec;      /* panel ground, faint green-grey */
+  --ink: #1f2a24;        /* text */
+  --muted: #5d6b62;      /* secondary text */
+  --rule: #c9d1c8;       /* hairlines, control borders */
+  --moss: #4f6b2f;       /* accent: active controls */
+  --moss-ink: #f4f7ef;   /* text on accent */
+  --sky: #b7cddd;        /* 3D background */
+  --ground: #8a9a6a;     /* 3D ground */
+  --bark: #a39d8d;       /* untextured bark */
+  --line: #3b3226;       /* line-mode branches */
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #161c19; --ink: #e3e9e2; --muted: #9aa89f; --rule: #2f3a34;
+    --moss: #93b665; --moss-ink: #111a0c; --sky: #1d2a35; --ground: #3a4530;
+    --bark: #8f8a7c; --line: #d9cdb6; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #161c19; --ink: #e3e9e2; --muted: #9aa89f; --rule: #2f3a34;
+  --moss: #93b665; --moss-ink: #111a0c; --sky: #1d2a35; --ground: #3a4530;
+  --bark: #8f8a7c; --line: #d9cdb6; color-scheme: dark;
+}
+
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 14px/1.5 var(--font-body);
+}
+.app { display: grid; grid-template-columns: 300px 1fr; height: 100%; }
+.panel {
+  display: flex; flex-direction: column; gap: 22px;
+  padding: 24px 20px; border-right: 1px solid var(--rule);
+  overflow-y: auto; min-width: 0;
+}
+.stage { position: relative; min-width: 0; min-height: 0; background: var(--sky); }
+.stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+h1 {
+  margin: 0; font: 500 28px/1.1 var(--font-display); letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.sub { margin: 6px 0 0; color: var(--muted); font-style: italic; font-family: var(--font-display); font-size: 15px; }
+
+.group { display: flex; flex-direction: column; gap: 8px; }
+.label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.trees { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.trees button {
+  all: unset; box-sizing: border-box; width: 100%; cursor: pointer;
+  display: grid; grid-template-columns: 1fr auto; gap: 8px;
+  padding: 5px 8px; border-radius: 4px;
+}
+.trees button:hover { background: color-mix(in srgb, var(--moss) 10%, transparent); }
+.trees button[aria-pressed="true"] { background: var(--moss); color: var(--moss-ink); }
+.trees button:focus-visible, .seg button:focus-visible, .file:focus-within, input[type=range]:focus-visible, .check input:focus-visible {
+  outline: 2px solid var(--moss); outline-offset: 2px;
+}
+.trees .n { font-family: var(--font-data); font-size: 12px; font-variant-numeric: tabular-nums; opacity: 0.8; }
+
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button {
+  all: unset; cursor: pointer; text-align: center; padding: 6px 2px; font-size: 12.5px;
+  border-left: 1px solid var(--rule);
+}
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--moss); color: var(--moss-ink); }
+
+.row { display: flex; align-items: center; gap: 10px; }
+input[type=range] { flex: 1; accent-color: var(--moss); min-width: 0; }
+.val { font-family: var(--font-data); font-size: 12px; width: 2ch; text-align: right; font-variant-numeric: tabular-nums; }
+.check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.check input { accent-color: var(--moss); }
+
+.file {
+  display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  border: 1px dashed var(--rule); border-radius: 6px; padding: 10px; color: var(--muted); text-align: center;
+}
+.file:hover { border-color: var(--moss); color: var(--ink); }
+.file input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+.format {
+  font-family: var(--font-data); font-size: 11.5px; line-height: 1.6; color: var(--muted);
+  border-top: 1px solid var(--rule); padding-top: 14px; margin: 0;
+  display: grid; grid-template-columns: auto 1fr; column-gap: 12px;
+}
+.format dt { color: var(--ink); }
+.format dd { margin: 0; }
+.credit { margin-top: auto; font-size: 12px; color: var(--muted); }
+
+.hud {
+  position: absolute; left: 14px; bottom: 12px; right: 14px; pointer-events: none;
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  font-family: var(--font-data); font-size: 11.5px; color: var(--ink); opacity: 0.75;
+}
+.drop {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--moss) 25%, transparent);
+  font: 500 20px var(--font-display); color: var(--ink);
+}
+.status { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink); padding: 16px; text-align: center; }
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: 58vh auto; height: auto; }
+  .stage { order: -1; height: 58vh; }
+  .panel { border-right: 0; border-top: 1px solid var(--rule); padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="panel">
+    <header>
+      <h1>Árboles fractales</h1>
+      <p class="sub">Poplar models, UAM 2005–2006</p>
+    </header>
+
+    <div class="group">
+      <span class="label" id="trees-label">Specimen</span>
+      <ul class="trees" id="trees" aria-labelledby="trees-label"></ul>
+    </div>
+
+    <div class="group">
+      <span class="label" id="mode-label">Render</span>
+      <div class="seg" id="mode" role="group" aria-labelledby="mode-label">
+        <button type="button" data-mode="0">Lines</button>
+        <button type="button" data-mode="1">Solid</button>
+        <button type="button" data-mode="2">Joints</button>
+        <button type="button" data-mode="3">Bark</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <label class="label" for="quality">Detail</label>
+      <div class="row">
+        <input type="range" id="quality" min="1" max="10" value="4">
+        <span class="val" id="quality-val">4</span>
+      </div>
+      <label class="check"><input type="checkbox" id="spin"> Rotate slowly</label>
+    </div>
+
+    <label class="file">
+      <input type="file" id="file" accept=".fra,.txt" multiple>
+      Open your own .fra files, or drop them on the view
+    </label>
+
+    <dl class="format" aria-label=".fra columns">
+      <dt>D1 D2</dt><dd>diameter at base, tip</dd>
+      <dt>h</dt><dd>branch length</dd>
+      <dt>Fi</dt><dd>angle from vertical (°)</dd>
+      <dt>alfa</dt><dd>azimuth (°)</dd>
+      <dt>r0</dt><dd>base point x y z</dd>
+    </dl>
+
+    <p class="credit">Víctor Fernández-Carbajales Cañete and Javier Molina Vela. Drag to orbit, scroll or pinch to zoom, right-drag to pan.</p>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="status" id="status">Loading trees…</div>
+    <div class="hud"><span id="hud-left"></span><span id="hud-right"></span></div>
+    <div class="drop" id="drop" hidden>Drop .fra files to view them</div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/BufferGeometryUtils.js"></script>
+<!--EMBEDDED-DATA-->
+<script>
+"use strict";
+
+/* ---------- .fra parsing (same format as the C viewer, see src/tree.h) ---------- */
+function parseFra(text) {
+  const deg = Math.PI / 180, branches = [];
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#") || line.startsWith("//")) continue;
+    const v = line.split(/\s+/).map(Number);
+    if (v.length < 8 || v.some(Number.isNaN)) continue;
+    const [d1, d2, h, fi, alfa, x, y, z] = v;
+    branches.push({
+      base: new THREE.Vector3(x, y, z),
+      dir: new THREE.Vector3(Math.sin(fi * deg) * Math.sin(alfa * deg), Math.cos(fi * deg), Math.sin(fi * deg) * Math.cos(alfa * deg)),
+      length: h, rBase: d1 / 2, rTip: d2 / 2,
+    });
+  }
+  return branches;
+}
+
+/* ---------- state ---------- */
+const state = { trees: [], focus: -1, mode: 3, quality: 4, spin: false };
+let barkTexture = null;
+
+/* ---------- three.js scene ---------- */
+const stage = document.getElementById("stage");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, 1, 1, 10000);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.495;
+
+scene.add(new THREE.HemisphereLight(0xdfe8f0, 0x5a5340, 0.75));
+const sun = new THREE.DirectionalLight(0xfff4e0, 1.0);
+sun.position.set(0.4, 1, 0.6);
+scene.add(sun);
+
+const ground = new THREE.Mesh(new THREE.CircleGeometry(1, 72), new THREE.MeshLambertMaterial());
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.05;
+scene.add(ground);
+
+let forestGroup = new THREE.Group();
+scene.add(forestGroup);
+
+function cssColor(name) {
+  return new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue(name).trim());
+}
+function applyTheme() {
+  scene.background = cssColor("--sky");
+  ground.material.color = cssColor("--ground");
+  rebuild(false);
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+/* Seeded layout so the forest looks the same on every visit. */
+function layoutForest(trees) {
+  let seed = 1;
+  const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const ring = 1.4 * Math.max(...trees.map(t => t.footprint));
+  trees.forEach((t, i) => {
+    if (i === 0) { t.offset = new THREE.Vector3(); return; }
+    const a = (2 * Math.PI * (i - 1)) / (trees.length - 1) + (rand() - 0.5) * 0.6;
+    const r = ring * (0.8 + 0.4 * rand());
+    t.offset = new THREE.Vector3(r * Math.sin(a), 0, r * Math.cos(a));
+  });
+}
+
+function makeTree(name, text) {
+  const branches = parseFra(text);
+  if (!branches.length) return null;
+  const box = new THREE.Box3();
+  for (const b of branches) {
+    box.expandByPoint(b.base);
+    box.expandByPoint(b.base.clone().addScaledVector(b.dir, b.length));
+  }
+  const footprint = Math.max(Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z));
+  return { name, branches, box, footprint, offset: new THREE.Vector3() };
+}
+
+/* Build one merged mesh (or line set) per tree. */
+const UP = new THREE.Vector3(0, 1, 0);
+function buildTreeObject(tree) {
+  const lineColor = cssColor("--line");
+  if (state.mode === 0) {
+    const pts = [];
+    for (const b of tree.branches) {
+      const tip = b.base.clone().addScaledVector(b.dir, b.length);
+      pts.push(b.base.x, b.base.y, b.base.z, tip.x, tip.y, tip.z);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+    return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: lineColor }));
+  }
+
+  const slices = 3 + 2 * (state.quality - 1);
+  const joints = state.mode >= 2, textured = state.mode === 3 && barkTexture;
+  const parts = [], m = new THREE.Matrix4(), q = new THREE.Quaternion();
+  for (const b of tree.branches) {
+    q.setFromUnitVectors(UP, b.dir);
+    const cyl = new THREE.CylinderGeometry(b.rTip, b.rBase, b.length, slices, 1, true);
+    if (textured) {  // repeat bark along the branch instead of stretching it
+      const rep = b.length / (2 * Math.PI * Math.max(b.rBase, 0.5));
+      const uv = cyl.attributes.uv;
+      for (let i = 0; i < uv.count; i++) uv.setY(i, uv.getY(i) * rep);
+    }
+    cyl.translate(0, b.length / 2, 0);
+    m.compose(b.base, q, new THREE.Vector3(1, 1, 1));
+    cyl.applyMatrix4(m);
+    parts.push(cyl);
+    if (joints && b.rTip > 0) {
+      const s = new THREE.SphereGeometry(b.rTip, slices, Math.floor(slices / 2) + 2);
+      s.translate(b.base.x + b.dir.x * b.length, b.base.y + b.dir.y * b.length, b.base.z + b.dir.z * b.length);
+      parts.push(s);
+    }
+  }
+  const geo = THREE.BufferGeometryUtils.mergeBufferGeometries(parts.map(p => p.index ? p.toNonIndexed() : p));
+  parts.forEach(p => p.dispose());
+  const mat = textured
+    ? new THREE.MeshLambertMaterial({ map: barkTexture, side: THREE.DoubleSide })
+    : new THREE.MeshLambertMaterial({ color: cssColor("--bark"), side: THREE.DoubleSide });
+  return new THREE.Mesh(geo, mat);
+}
+
+function visibleTrees() {
+  return state.focus < 0 ? state.trees : [state.trees[state.focus]];
+}
+
+function rebuild(refit) {
+  forestGroup.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+  scene.remove(forestGroup);
+  forestGroup = new THREE.Group();
+  const bounds = new THREE.Box3();
+  for (const t of visibleTrees()) {
+    const obj = buildTreeObject(t);
+    const off = state.focus < 0 ? t.offset : new THREE.Vector3();
+    obj.position.copy(off);
+    forestGroup.add(obj);
+    bounds.union(t.box.clone().translate(off));
+  }
+  scene.add(forestGroup);
+  if (!state.trees.length) return;
+
+  bounds.min.y = Math.min(bounds.min.y, 0);
+  const center = bounds.getCenter(new THREE.Vector3());
+  const radius = bounds.getSize(new THREE.Vector3()).length() / 2;
+  ground.scale.setScalar(radius * 1.3);
+  ground.position.x = center.x; ground.position.z = center.z;
+  camera.near = radius / 100; camera.far = radius * 20; camera.updateProjectionMatrix();
+  controls.maxDistance = radius * 8;
+  if (refit) {
+    controls.target.copy(center);
+    const dist = radius * 2.4, yaw = 20 * Math.PI / 180, pitch = 12 * Math.PI / 180;
+    camera.position.set(center.x + dist * Math.cos(pitch) * Math.sin(yaw), center.y + dist * Math.sin(pitch), center.z + dist * Math.cos(pitch) * Math.cos(yaw));
+    controls.update();
+  }
+  updateHud();
+}
+
+/* ---------- UI ---------- */
+const treesEl = document.getElementById("trees");
+function renderTreeList() {
+  const total = state.trees.reduce((n, t) => n + t.branches.length, 0);
+  const items = [{ label: "Whole forest", n: total, i: -1 }, ...state.trees.map((t, i) => ({ label: t.name, n: t.branches.length, i }))];
+  treesEl.replaceChildren(...items.map(it => {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(it.i === state.focus));
+    b.innerHTML = `<span></span><span class="n"></span>`;
+    b.firstChild.textContent = it.label;
+    b.lastChild.textContent = `${it.n.toLocaleString("en")} br.`;
+    b.addEventListener("click", () => { state.focus = it.i; renderTreeList(); rebuild(true); });
+    li.append(b);
+    return li;
+  }));
+}
+
+const modeEl = document.getElementById("mode");
+function syncMode() {
+  for (const b of modeEl.children) b.setAttribute("aria-pressed", String(+b.dataset.mode === state.mode));
+}
+modeEl.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.mode = +b.dataset.mode; syncMode(); rebuild(false);
+});
+
+const qEl = document.getElementById("quality"), qVal = document.getElementById("quality-val");
+qEl.addEventListener("input", () => { state.quality = +qEl.value; qVal.textContent = qEl.value; if (state.mode === 0) { state.mode = 1; syncMode(); } rebuild(false); });
+
+const spinEl = document.getElementById("spin");
+spinEl.addEventListener("change", () => { state.spin = spinEl.checked; });
+
+function updateHud() {
+  const vis = visibleTrees();
+  const n = vis.reduce((s, t) => s + t.branches.length, 0);
+  const h = Math.max(...vis.map(t => t.box.max.y));
+  document.getElementById("hud-left").textContent = `${vis.length} tree${vis.length > 1 ? "s" : ""} · ${n.toLocaleString("en")} branches`;
+  document.getElementById("hud-right").textContent = `tallest ${h.toFixed(1)} units`;
+}
+
+/* Loading user files */
+async function loadFiles(files) {
+  const loaded = [];
+  for (const f of files) {
+    const t = makeTree(f.name, await f.text());
+    if (t) loaded.push(t);
+  }
+  if (!loaded.length) { setStatus("Those files have no branch rows. Each row needs 8 numbers: D1 D2 h Fi alfa r0x r0y r0z."); return; }
+  setTrees(loaded);
+}
+document.getElementById("file").addEventListener("change", e => loadFiles([...e.target.files]));
+const dropEl = document.getElementById("drop");
+stage.addEventListener("dragover", e => { e.preventDefault(); dropEl.hidden = false; });
+stage.addEventListener("dragleave", e => { if (e.target === dropEl) dropEl.hidden = true; });
+stage.addEventListener("drop", e => { e.preventDefault(); dropEl.hidden = true; loadFiles([...e.dataTransfer.files]); });
+
+function setStatus(msg) {
+  const s = document.getElementById("status");
+  s.textContent = msg || ""; s.hidden = !msg;
+}
+
+function setTrees(trees) {
+  state.trees = trees; state.focus = -1;
+  layoutForest(trees); renderTreeList(); rebuild(true); setStatus("");
+}
+
+/* ---------- startup: embedded data (single-file build) or ../data/ ---------- */
+async function loadDefaultData() {
+  const embedded = document.getElementById("fra-data");
+  if (embedded) {
+    const data = JSON.parse(embedded.textContent);
+    if (data.bark) barkTexture = await loadTexture(data.bark);
+    return data.trees.map(t => makeTree(t.name, t.text)).filter(Boolean);
+  }
+  const trees = [];
+  for (let i = 0; i < 100; i++) {
+    const res = await fetch(`../data/tree${i}.fra`).catch(() => null);
+    if (!res || !res.ok) break;
+    const t = makeTree(`tree${i}.fra`, await res.text());
+    if (t) trees.push(t);
+  }
+  barkTexture = await loadTexture("../data/bark.bmp").catch(() => null);
+  return trees;
+}
+function loadTexture(url) {
+  return new Promise((resolve, reject) => new THREE.TextureLoader().load(url, tex => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    resolve(tex);
+  }, undefined, reject));
+}
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(h, 1); camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+
+renderer.setAnimationLoop(() => {
+  if (state.spin) controls.autoRotate = true, controls.autoRotateSpeed = 0.6; else controls.autoRotate = false;
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+syncMode();
+scene.background = cssColor("--sky");
+ground.material.color = cssColor("--ground");
+loadDefaultData().then(trees => {
+  if (!barkTexture && state.mode === 3) { state.mode = 2; syncMode(); }
+  if (trees.length) setTrees(trees);
+  else setStatus("No trees found in ../data/. Serve the repository root (python3 -m http.server) and open /web/, or open .fra files with the panel.");
+}).catch(err => setStatus("Could not load the trees: " + err.message));
+</script>
+</body>
+</html>

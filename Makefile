@@ -1,14 +1,26 @@
-# Requires: sudo apt install build-essential freeglut3-dev libglu1-mesa-dev
-CC      = gcc
-CFLAGS  = -O2 -w
-LDLIBS  = -lglut -lGLU -lGL -lm
-SRC     = main.c Visualizador.c Fichero.c Mem.c Def.c
+# Debian/Ubuntu: sudo apt install build-essential freeglut3-dev libglu1-mesa-dev
+# Fedora:        sudo dnf install gcc make freeglut-devel mesa-libGLU-devel
+# Arch:          sudo pacman -S base-devel freeglut glu
 
-visualizador: $(SRC) *.h
-	$(CC) $(CFLAGS) -o $@ $(SRC) $(LDLIBS)
+CC      ?= cc
+CFLAGS  ?= -O2
+CFLAGS  += -std=c99 -D_DEFAULT_SOURCE -Wall -Wextra
+LDLIBS  += -lglut -lGLU -lGL -lm
 
-run: visualizador
-	./visualizador arboles
+SRC := src/main.c src/viewer.c src/tree.c src/bmp.c
+OBJ := $(SRC:.c=.o)
+BIN := fractal-trees
+
+$(BIN): $(OBJ)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+src/%.o: src/%.c src/*.h
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+run: $(BIN)
+	./$(BIN)
 
 clean:
-	rm -f visualizador
+	rm -f $(OBJ) $(BIN)
+
+.PHONY: run clean

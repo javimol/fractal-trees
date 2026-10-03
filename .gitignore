@@ -1,2 +1,4 @@
-visualizador
-*.o
+fractal-trees
+src/*.o
+dist/
+*.ppm
