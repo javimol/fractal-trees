@@ -21,7 +21,7 @@ make            # see visualizer/README.md for dependencies
 ./fractal-trees
 ```
 
-Or open the web viewer without compiling anything; [visualizer/README.md](visualizer/README.md#web-viewer) explains how.
+Or, without compiling or running anything, open [visualizer/standalone/fractal-trees.html](visualizer/standalone/fractal-trees.html) in a browser. It's a single file with all seven trees embedded (it needs an internet connection to load three.js). [visualizer/README.md](visualizer/README.md#web-viewer) has more on the web viewer.
 
 To grow a forest of your own and look at it:
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a single-file web viewer with the trees and bark texture embedded.
 
-    python3 tools/build_standalone.py [--fragment] [-o dist/fractal-trees.html]
+    python3 tools/build_standalone.py [--fragment] [-o standalone/fractal-trees.html]
 
 Run from the visualizer/ folder (paths are resolved relative to this script).
 
@@ -41,7 +41,7 @@ def bmp_to_png_data_uri(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-o", "--output", default=os.path.join(ROOT, "dist", "fractal-trees.html"))
+    ap.add_argument("-o", "--output", default=os.path.join(ROOT, "standalone", "fractal-trees.html"))
     ap.add_argument("--data", default=os.path.join(REPO, "data", "chopos"))
     ap.add_argument("--fragment", action="store_true")
     args = ap.parse_args()

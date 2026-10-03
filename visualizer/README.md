@@ -68,7 +68,7 @@ src/viewer.c/h OpenGL/GLUT rendering, camera and controls
 
 `web/index.html` is a three.js version of the same viewer, with the same render modes. You can also drop your own `.fra` files onto it.
 
-- **Without a server:** run `python3 tools/build_standalone.py`. It writes `dist/fractal-trees.html` with the trees and texture embedded, and you can open that file directly in a browser. It loads three.js from a CDN, so it needs an internet connection.
+- **Without a server:** open [standalone/fractal-trees.html](standalone/fractal-trees.html) directly in a browser (download it, or double-click it in a clone). It's a single file with the trees and texture embedded. It loads three.js from a CDN, so it needs an internet connection. After changing `web/index.html` or the data, rebuild it with `python3 tools/build_standalone.py`.
 - **From the repository:** run `python3 -m http.server` in the repository root (the folder above this one) and open <http://localhost:8000/visualizer/web/>. That page loads `data/chopos/`.
 
 ![Web viewer](../docs/web-viewer.png)
