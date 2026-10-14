@@ -6,6 +6,21 @@
 
 **[▶ Open the interactive viewer](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html)** in your browser: orbit, zoom, switch render modes and look at each tree. Nothing to install.
 
+## Explore the forest four ways
+
+The viewer, in the browser or on the desktop, draws every tree in four modes. Switch between them at any time with the **Lines / Solid / Joints / Bark** buttons, or the `0`–`3` keys on the desktop:
+
+![The same poplar drawn as lines, solid cylinders, cylinders with joints, and textured bark](docs/render-modes.png)
+
+| Mode | What you see | Good for |
+|---|---|---|
+| **Lines** | Each branch as a single line | Reading the branching structure, the skeleton the generator builds |
+| **Solid** | Tapered, shaded cylinders | The volume of trunk and branches |
+| **Joints** | Cylinders plus a sphere at every joint | Smooth bends where crooked segments meet |
+| **Bark** | Joints with a bark texture | The finished look |
+
+Drag to orbit, scroll to zoom and right-drag to pan. The list on the left switches between the whole forest and each tree on its own, and the **Detail** slider trades smoothness for speed. Try it with the [original seven poplars](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html) or the [50-tree forest](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html).
+
 ## Contents
 
 ```
@@ -51,7 +66,7 @@ make
 
 **[▶ Explore it in your browser](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)** ([visualizer/standalone/big-forest.html](visualizer/standalone/big-forest.html)). With the desktop viewer, run `./fractal-trees ../data/big_forest_chopos`.
 
-[![Fifty generated poplars, rotating. Click to open the interactive viewer.](docs/big-forest.gif)](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)
+[![A figure-8 flight through the 50 generated poplars. Click to open the interactive viewer.](docs/big-forest.gif)](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)
 
 ## The tree models
 
