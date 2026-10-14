@@ -70,7 +70,8 @@ src/viewer.c/h OpenGL/GLUT rendering, camera and controls
 
 `web/index.html` is a three.js version of the same viewer, with the same render modes. You can also drop your own `.fra` files onto it.
 
-- **Without a server:** clone the repository (or download just [standalone/fractal-trees.html](standalone/fractal-trees.html)) and open the local file in a browser; GitHub itself only shows its source. It's a single file with the trees and texture embedded. It loads three.js from a CDN, so it needs an internet connection. [standalone/big-forest.html](standalone/big-forest.html) is the same viewer with the 50 trees of `data/big_forest_chopos/`. After changing `web/index.html` or the data, rebuild them:
+- **Online:** [standalone/fractal-trees.html](standalone/fractal-trees.html) is published with GitHub Pages: [open the viewer](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html). The same goes for [the 50-tree forest](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html) and for [web/index.html itself](https://javimol.github.io/fractal-trees/visualizer/web/), which loads `data/chopos/` from the site.
+- **Without a server:** download [standalone/fractal-trees.html](standalone/fractal-trees.html) (or clone the repository) and open the local file in a browser. It's a single file with the trees and texture embedded. It loads three.js from a CDN, so it needs an internet connection. [standalone/big-forest.html](standalone/big-forest.html) is the same viewer with the 50 trees of `data/big_forest_chopos/`. After changing `web/index.html` or the data, rebuild them:
 
   ```sh
   python3 tools/build_standalone.py

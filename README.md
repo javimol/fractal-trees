@@ -2,7 +2,9 @@
 
 3D models of trees described as lists of branches, a generator that grows new ones from a handful of parameters, and a visualizer to explore them. It started as a 2004–2006 doctoral course project ("Gráficos 3D", Universidad Autónoma de Madrid), originally built with Visual C++ on Windows. This repository is a cleaned-up, portable version of it.
 
-![Forest of seven poplar models](docs/forest.png)
+[![The seven 2006 poplars, rotating. Click to open the interactive viewer.](docs/forest.gif)](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html)
+
+**[▶ Open the interactive viewer](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html)** in your browser: orbit, zoom, switch render modes and look at each tree. Nothing to install.
 
 ## Contents
 
@@ -11,7 +13,7 @@ data/chopos/             seven poplar (chopo) models, Arbol0–6.fra, plus a bar
 data/big_forest_chopos/  50 poplars grown with the generator, tree0–49.fra, plus the same texture
 tree_generator/          command-line generator that grows new .fra trees (C, no dependencies)
 visualizer/              desktop viewer (C, OpenGL, GLUT) and web viewer (three.js)
-docs/                    screenshots
+docs/                    screenshots and animations
 ```
 
 To see the trees straight away:
@@ -22,7 +24,7 @@ make            # see visualizer/README.md for dependencies
 ./fractal-trees
 ```
 
-Or, without compiling or running anything, clone the repository (or download that single file) and open your local copy of [visualizer/standalone/fractal-trees.html](visualizer/standalone/fractal-trees.html) in a browser. Viewing it on GitHub only shows its source code. It's a single file with all seven trees embedded (it needs an internet connection to load three.js). [visualizer/README.md](visualizer/README.md#web-viewer) has more on the web viewer.
+Or, without compiling or running anything, open the [interactive viewer](https://javimol.github.io/fractal-trees/visualizer/standalone/fractal-trees.html). It's [visualizer/standalone/fractal-trees.html](visualizer/standalone/fractal-trees.html), a single file with all seven trees embedded, served by GitHub Pages. You can also download it and open it locally (it needs an internet connection to load three.js). [visualizer/README.md](visualizer/README.md#web-viewer) has more on the web viewer.
 
 To grow a forest of your own and look at it:
 
@@ -47,9 +49,9 @@ make
 ./tree-generator -s 2026 -n 50 -o ../data/big_forest_chopos
 ```
 
-To explore it without running anything, clone the repository (or download that single file) and open your local copy of [visualizer/standalone/big-forest.html](visualizer/standalone/big-forest.html) in a browser. With the desktop viewer, run `./fractal-trees ../data/big_forest_chopos`.
+**[▶ Explore it in your browser](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)** ([visualizer/standalone/big-forest.html](visualizer/standalone/big-forest.html)). With the desktop viewer, run `./fractal-trees ../data/big_forest_chopos`.
 
-![Fifty generated poplars](docs/big-forest.png)
+[![Fifty generated poplars. Click to open the interactive viewer.](docs/big-forest.png)](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)
 
 ## The tree models
 
