@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;1,400&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: full-height 3D stage with a narrow specimen-label panel (left on desktop, below on phones). */
+/* Layout: full-height 3D stage with a narrow control panel (left on desktop, below on phones). */
 :root {
   --paper: #eef1ec;      /* panel ground, faint green-grey */
   --ink: #1f2a24;        /* text */
@@ -135,11 +135,6 @@ input[type=range] { flex: 1; accent-color: var(--moss); min-width: 0; }
     </header>
 
     <div class="group">
-      <span class="label" id="trees-label">Specimen</span>
-      <ul class="trees" id="trees" aria-labelledby="trees-label"></ul>
-    </div>
-
-    <div class="group">
       <span class="label" id="mode-label">Render</span>
       <div class="seg" id="mode" role="group" aria-labelledby="mode-label">
         <button type="button" data-mode="0">Lines</button>
@@ -156,6 +151,11 @@ input[type=range] { flex: 1; accent-color: var(--moss); min-width: 0; }
         <span class="val" id="quality-val">4</span>
       </div>
       <label class="check"><input type="checkbox" id="spin"> Rotate slowly</label>
+    </div>
+
+    <div class="group">
+      <span class="label" id="trees-label">Trees</span>
+      <ul class="trees" id="trees" aria-labelledby="trees-label"></ul>
     </div>
 
     <label class="file">
