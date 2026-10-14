@@ -51,7 +51,7 @@ make
 
 **[▶ Explore it in your browser](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)** ([visualizer/standalone/big-forest.html](visualizer/standalone/big-forest.html)). With the desktop viewer, run `./fractal-trees ../data/big_forest_chopos`.
 
-[![Fifty generated poplars. Click to open the interactive viewer.](docs/big-forest.png)](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)
+[![Fifty generated poplars, rotating. Click to open the interactive viewer.](docs/big-forest.gif)](https://javimol.github.io/fractal-trees/visualizer/standalone/big-forest.html)
 
 ## The tree models
 
